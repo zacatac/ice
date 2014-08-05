@@ -451,7 +451,7 @@ module ApplicationHelper
   #----------------------------------------------------------------------------
   # Generate buttons for available views given the current context
   def view_buttons
-    controller = params['controller']
+    controller = params['controller'] 
     action = (params['action'] == 'show') ? 'show' : 'index' # create update redraw filter index actions all use index view
     views = FatFreeCRM::ViewFactory.views_for(:controller => controller, :action => action)
     return nil unless views.size > 1

@@ -14,7 +14,9 @@ Rails.application.routes.draw do
   match 'logout'     => 'authentications#destroy', :as => :logout
   match 'profile'    => 'users#show',              :as => :profile
   match 'signup'     => 'users#new',               :as => :signup
-
+  ### CHANGES ####
+  match 'kiosk'      => 'kiosk/kiosks#index',       :as => :kiosk
+  ################
   match '/home/options',  :as => :options
   match '/home/toggle',   :as => :toggle
   match '/home/timeline', :as => :timeline
@@ -25,7 +27,22 @@ Rails.application.routes.draw do
   resources :comments,       :except => [:new, :show]
   resources :emails,         :only   => [:destroy]
   resources :passwords,      :only   => [:new, :create, :edit, :update]
+  ### CHANGES ####
 
+  ## KIOSK ##
+  namespace :kiosk do
+    resources :kiosks do
+      collection do
+        post :signin
+        post :register
+        post :waiver
+        post :pic
+        match :swipe
+      end
+    end
+  end
+
+  ################
   resources :accounts, :id => /\d+/ do
     collection do
       get  :advanced_search
@@ -35,6 +52,7 @@ Rails.application.routes.draw do
       match :auto_complete
       get  :redraw
       get  :versions
+      post :create_many
     end
     member do
       put  :attach

@@ -1,0 +1,24 @@
+/*
+ * Copyright (c) 2008-2013 Michael Dvorkin and contributors.
+ *
+ * Fat Free CRM is freely distributable under the terms of MIT license.
+ * See MIT-LICENSE file or http://www.opensource.org/licenses/mit-license.php
+ *------------------------------------------------------------------------------
+ */
+
+/*
+ *= require "Flat-UI/bootstrap/css/bootstrap.css" 
+ *= require "datepicker-local/css/bootstrap-datetimepicker.css" 
+ *= require "Flat-UI/css/flat-ui.css" 
+ *= require "Flat-UI/css/demo.css" 
+ *= require "animo.js/animate+animo.css"
+ *= require "css/kiosk.css"
+ *= require "css/alertify.default.css" 
+ *= require "css/alertify.core.css" 
+ *= require_self
+*/
+<%
+Gem.loaded_specs.keys.grep(/^ffcrm_/).each do |plugin|
+  require_asset(plugin) rescue Sprockets::FileNotFound
+end
+%>

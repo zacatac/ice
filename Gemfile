@@ -6,6 +6,8 @@ source 'https://rubygems.org'
 # gem 'sqlite3'
 gem 'pg'
 
+gem 'httpclient'
+
 # Removes a gem dependency
 def remove(name)
   @dependencies.reject! {|d| d.name == name }
@@ -50,7 +52,7 @@ end
 group :development, :test do
   gem 'rspec-rails', '~> 2'
   gem 'headless'
-  gem 'debugger' unless ENV["CI"]
+  gem 'debugger2' unless ENV["CI"]
   gem 'pry-rails' unless ENV["CI"]
 end
 

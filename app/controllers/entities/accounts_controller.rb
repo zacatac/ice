@@ -30,13 +30,13 @@ class AccountsController < EntitiesController
   # GET /accounts/new
   #----------------------------------------------------------------------------
   def new
+    puts "NEW CALLED"
     @account.attributes = {:user => current_user, :access => Setting.default_access, :assigned_to => nil}
 
     if params[:related]
       model, id = params[:related].split('_')
       instance_variable_set("@#{model}", model.classify.constantize.find(id))
     end
-
     respond_with(@account)
   end
 
@@ -53,6 +53,7 @@ class AccountsController < EntitiesController
   # POST /accounts
   #----------------------------------------------------------------------------
   def create
+    puts "CREATE CALLED"
     @comment_body = params[:comment_body]
     respond_with(@account) do |format|
       if @account.save
@@ -64,7 +65,24 @@ class AccountsController < EntitiesController
       end
     end
   end
-
+  
+  # POST /accounts (many)
+  #----------------------------------------------------------------------------
+  def create_many
+    puts "CREATE_MANY_CALLED"
+    file_data = params[:account][:customers]
+    if file_data.respond_to?(:read)
+      xml_contents = file_data.read
+    elsif file_data.respond_to?(:path)
+      xml_contents = File.read(file_data.path)
+    else
+      logger.error "Bad file_data: #{file_data.class.name}: #{file_data.inspect}"
+    end
+    if xml_contents
+      puts xml_contents
+    end
+  end
+  
   # PUT /accounts/1
   #----------------------------------------------------------------------------
   def update
@@ -79,7 +97,6 @@ class AccountsController < EntitiesController
   #----------------------------------------------------------------------------
   def destroy
     @account.destroy
-
     respond_with(@account) do |format|
       format.html { respond_to_destroy(:html) }
       format.js   { respond_to_destroy(:ajax) }
