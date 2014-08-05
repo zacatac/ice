@@ -18,20 +18,16 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
     'Connection' => 'Keep-Alive'
   }
   
-  attr_accessor :swipe
-  attr_accessor :waiver
-  attr_accessor :cardid
-  attr_accessor :pic
-  
   def index
     puts "CALLING INDEX"
-    puts session[:swipe]
     @swipe = session[:swipe]
     @waiver = session[:waiver]
     @pic = session[:pic]
   end
 
   def signin
+    @account = Account.find_by_email(params[:email])
+    
     puts "SIGNIN"    
   end
 
@@ -54,12 +50,12 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
     puts validate_swipe.status
     response = JSON.parse validate_swipe.content
     puts response
-    @swipe = true
+    swipe = true
     if not response["reg"]
       flash.alert = "Card not registered"      
-      @swipe = false
+      swipe = false
     end    
-    session[:swipe] = @swipe
+    session[:swipe] = swipe
     session[:cardid] = response[:cardid]
     redirect_to :action => :index
   end

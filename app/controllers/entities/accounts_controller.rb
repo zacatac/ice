@@ -30,7 +30,6 @@ class AccountsController < EntitiesController
   # GET /accounts/new
   #----------------------------------------------------------------------------
   def new
-    puts "NEW CALLED"
     @account.attributes = {:user => current_user, :access => Setting.default_access, :assigned_to => nil}
 
     if params[:related]
@@ -53,8 +52,8 @@ class AccountsController < EntitiesController
   # POST /accounts
   #----------------------------------------------------------------------------
   def create
-    puts "CREATE CALLED"
     @comment_body = params[:comment_body]
+    
     respond_with(@account) do |format|
       if @account.save
         @account.add_comment_by_user(@comment_body, current_user)
@@ -69,18 +68,47 @@ class AccountsController < EntitiesController
   # POST /accounts (many)
   #----------------------------------------------------------------------------
   def create_many
-    puts "CREATE_MANY_CALLED"
+    data = {      
+      :user_id => current_user.id,
+      :assigned_to => current_user.id,
+      :category => params[:account][:category],
+      :subscribed_users => nil,
+      :name => nil,
+      :email => nil
+    }
+
     file_data = params[:account][:customers]
     if file_data.respond_to?(:read)
-      xml_contents = file_data.read
+      file_contents = file_data.read
     elsif file_data.respond_to?(:path)
-      xml_contents = File.read(file_data.path)
+      file_contents = File.read(file_data.path)
     else
       logger.error "Bad file_data: #{file_data.class.name}: #{file_data.inspect}"
     end
-    if xml_contents
-      puts xml_contents
-    end
+    head = true
+    saved = 0
+    CSV.parse(file_contents) do |row|
+      if head
+        headers = row.split(',')[0].map{ |x| x.downcase }
+        head = false
+      else
+        row = row.split(',')[0]
+        data[:name] = "#{row[0].strip.capitalize} #{row[1].strip.capitalize}"
+        data[:email] = "#{row[4].strip.downcase}"  
+        cf_codename = "#{row[6].strip.upcase}"
+        cf_birthday = "#{row[3].strip}"
+        next if /[Tt]est/.match(data[:name])
+        @account = Account.new()
+        @account.assign_attributes(data)
+        @account.cf_birthday = cf_birthday
+        @account.cf_codename = cf_codename
+        if @account.save
+          saved += 1
+        end
+      end
+    end    
+    flash.notice = "#{saved} accounts uploaded!"
+    redirect_to action: 'index'
   end
   
   # PUT /accounts/1
