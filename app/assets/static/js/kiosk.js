@@ -86,10 +86,6 @@ $(document).ready(function () {
 	return true;
     });
      
-     setTimeout(function(){ $('.flash').animo( 
-	 { animation: "fadeOutRight", duration: 1, keep: true}, 
-	     function() { $('.flash').hide(); })}, 5000);
-
      // Put event listeners into place
      window.addEventListener("DOMContentLoaded", function() {
        // Grab elements, create settings, etc.

@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
 # Uncomment the database that you have configured in config/database.yml
 # ----------------------------------------------------------------------
@@ -7,6 +7,7 @@ source 'https://rubygems.org'
 gem 'pg'
 
 gem 'httpclient'
+gem 'net-ssh', '~> 2.7.0'
 
 # Removes a gem dependency
 def remove(name)
@@ -80,6 +81,7 @@ group :assets do
   gem 'uglifier',     '>= 1.0.3'
   gem 'execjs'
   gem 'therubyracer', :platform => :ruby unless ENV["CI"]
+  gem 'rvm-capistrano'
 end
 
 gem 'turbo-sprockets-rails3'
