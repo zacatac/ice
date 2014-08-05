@@ -3,4 +3,6 @@
     Laserstrike
   %h1#savedata
     %div.flash
-      test flash
+      - if flash[:notice]
+        = flash[:notice]
+        

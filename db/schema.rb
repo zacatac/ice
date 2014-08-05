@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131207033244) do
+ActiveRecord::Schema.define(:version => 20140805145451) do
 
   create_table "account_contacts", :force => true do |t|
     t.integer  "account_id"
@@ -46,6 +46,8 @@ ActiveRecord::Schema.define(:version => 20131207033244) do
     t.integer  "rating",                         :default => 0,        :null => false
     t.string   "category",         :limit => 32
     t.text     "subscribed_users"
+    t.string   "codename",         :limit => 20
+    t.date     "birth"
   end
 
   add_index "accounts", ["assigned_to"], :name => "index_accounts_on_assigned_to"

@@ -38,6 +38,7 @@ Rails.application.routes.draw do
         post :waiver
         post :pic
         match :swipe
+        get :reset
       end
     end
   end

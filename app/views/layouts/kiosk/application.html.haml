@@ -11,9 +11,16 @@
   /[if lt IE 9]
 
 %body
-
+  %h1
+    = "swipe #{@swipe}"
+    = "waiver #{@waiver}"
+    = "pic #{@pic}"
+    = "cardid #{@cardid}"
   %div.container.kiosk-container
     = render "layouts/kiosk/header"
+    = form_tag({controller: :kiosks, action: :reset}, method: :get) do
+      .form-group 
+        %input#reset-button.btn.btn-block.btn-lg.btn-primary{:tabindex => "280", :type => "submit", :value => "Restart"}
     - if @swipe
       .row
         .col-md-6.col-centered
@@ -22,11 +29,12 @@
             OR
             %a#kiosk-register-button{:href => "javascript:void(0);"} Register
           #kiosk-login
-            %form#signin-form.form{:action => "kiosk/kiosks#signin", :method => "POST", :role => "form"}
-              .form-group
-                %label.control-label{:for => "email"} Email
-                %input#email.form-control{:name => "email", :tabindex => "110", :type => "text", :value => ""}
-                  %a#kiosk-no-email-button{:href => "javascript:void(0);"} Never entered your email?
+            = form_tag({controller: :kiosks, action: :signin}, method: :post) do
+              %form#signin-form.form
+                .form-group
+                  %label.control-label{:for => "email"} Email
+                  %input#email.form-control{:name => "email", :tabindex => "110", :type => "text", :value => ""}
+                %a#kiosk-no-email-button{:href => "javascript:void(0);"} Never entered your email?
                 %input#signin-button.btn.btn-block.btn-lg.btn-primary{:tabindex => "280", :type => "submit", :value => "Sign in"}
       .row
         .col-md-5.col-centered
@@ -113,33 +121,35 @@
               DO AGREE TO THIS ACKNOWLEDGEMENT AND RELEASE UNLESS YOU HAVE READ IT AND UNDERSTAND IT.  IF YOU DON'T UNDERSTAND IT,
               ASK AN ICE SPORTS FORUM REPRESENTATIVE FOR ASSISTANCE.
           .row
-            %form#waiver-form.form{:action => "kiosk/kiosks#waiver", :formnovalidate => "", :method => "POST", :novalidate => "", :role => "form"}
-              .col-md-12.col-centered
-                .form-group
-                  .row
-                    .col-md-8.col-centered
-                      .col-md-6
-                        %label.control-label{:for => "waiver"}
-                          %h6.waiver-question Do you agree to the waiver?
-                      .col-md-2
-                        %select#waiver.select-block{:name => "waiver", :style => "display: none;", :value => ""}
-                          %option{:value => "N"} No
-                          %option{:value => "Y"} Yes
-                      %input#waiver-button.btn.btn-block.btn-lg.btn-info{:style => "display:none;", :tabindex => "280", :type => "submit", :value => "Continue"}
+            = form_tag({controller: :kiosks, action: :waiver}, method: :post) do
+              %form#waiver-form.form
+                .col-md-12.col-centered
+                  .form-group
+                    .row
+                      .col-md-8.col-centered
+                        .col-md-6
+                          %label.control-label{:for => "waiver"}
+                            %h6.waiver-question Do you agree to the waiver?
+                        .col-md-2
+                          %select#waiver.select-block{:name => "waiver", :style => "display: none;", :value => ""}
+                            %option{:value => "N"} No
+                            %option{:value => "Y"} Yes
+                        %input#waiver-button.btn.btn-block.btn-lg.btn-info{:style => "display:none;", :tabindex => "280", :type => "submit", :value => "Continue"}
 
     - elsif @pic
       .row
         .col-md-7.col-centered
           %video#video.video{:autoplay => "", :width => "640"}
-            %canvas#canvas{:height => "435", :width => "580"}
-              %button#snap.btn.btn-block.btn-lg.btn-primary Snap Photo
-              %button#retake-photo.btn.btn-block.btn-lg.btn-primary Retake Photo
-              %button#save-photo.btn.btn-block.btn-lg.btn-primary Save Photo
-              %form#photo-form{:action => "kiosk/kiosks#pic", :method => "POST"}
-                %input#file{:name => "file", :type => "text"}
-                  %br/
-                  %br/
-                  %input#file-button{:type => "submit", :value => "submit"}
+          %canvas#canvas{:height => "435", :width => "580"}
+          %button#snap.btn.btn-block.btn-lg.btn-primary Snap Photo
+          %button#retake-photo.btn.btn-block.btn-lg.btn-primary Retake Photo
+          %button#save-photo.btn.btn-block.btn-lg.btn-primary Save Photo
+          = form_tag({controller: :kiosks, action: :pic}, method: :post) do
+            %form#photo-form
+              %input#file{:name => "file", :type => "text"}
+                %br/
+                %br/
+              %input#file-button{:type => "submit", :value => "submit"}
     - else 
       .row
         .col-md-12

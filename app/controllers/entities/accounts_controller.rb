@@ -74,7 +74,9 @@ class AccountsController < EntitiesController
       :category => params[:account][:category],
       :subscribed_users => nil,
       :name => nil,
-      :email => nil
+      :email => nil,
+      :codename => nil,
+      :birth => nil
     }
 
     file_data = params[:account][:customers]
@@ -95,13 +97,11 @@ class AccountsController < EntitiesController
         row = row.split(',')[0]
         data[:name] = "#{row[0].strip.capitalize} #{row[1].strip.capitalize}"
         data[:email] = "#{row[4].strip.downcase}"  
-        cf_codename = "#{row[6].strip.upcase}"
-        cf_birthday = "#{row[3].strip}"
+        data[:codename] = "#{row[6].strip.upcase}"
+        data[:birth]= "#{row[3].strip}"
         next if /[Tt]est/.match(data[:name])
         @account = Account.new()
         @account.assign_attributes(data)
-        @account.cf_birthday = cf_birthday
-        @account.cf_codename = cf_codename
         if @account.save
           saved += 1
         end
