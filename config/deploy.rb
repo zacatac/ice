@@ -3,7 +3,7 @@ lock '3.1.0'
 
 require 'capistrano/rvm'
 
-set :application, 'FatFreeCRM'
+set :application, 'fat_free_crm'
 set :repo_url, 'git@github.com:zacatac/ice.git'
 
 # Default branch is :master

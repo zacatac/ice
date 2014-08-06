@@ -9,7 +9,7 @@ require 'rvm/capistrano'
 require 'bundler/capistrano'
 load    'deploy/assets'
 
-set :application,     'fat_free_crm'
+set :application,     'FatFreeCRM'
 set :repository,      'git://github.com/fatfreecrm/fat_free_crm.git'
 set :branch,          'master'
 set :scm,             :git
