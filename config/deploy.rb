@@ -1,128 +1,54 @@
-# -*- coding: utf-8 -*-
-# Capistrano configuration. Now with TRUE zero-downtime unless DB migration.
-# 
-# require 'new_relic/recipes'         - Newrelic notification about deployment
-# require 'capistrano/ext/multistage' - We use 2 deployment environment: staging and production.
-# set :deploy_via, :remote_cache      - fetch only latest changes during deployment
-# set :normalize_asset_timestamps     - no need to touch (date modification) every assets
-# "deploy:web:disable"                - traditional maintenance page (during DB migrations deployment)
-# task :restart                       - Unicorn with preload_app should be reloaded by USR2+QUIT signals, not HUP
-#
-# http://unicorn.bogomips.org/SIGNALS.html
-# "If “preload_app” is true, then application code changes will have no effect; 
-# USR2 + QUIT (see below) must be used to load newer code in this case"
-# 
-# config/deploy.rb
-set :application, "FatFreeCRM"
-set :repository, "git@github.com/zacatac/ice.git"
-set :scm, :git
-set :branch, "master"
-set :user, "root"
-set :scm_passphrase, "32goldenice"
-set :use_sudo, false
-set :deploy_via, :copy
-set :ssh_options, { :forward_agent => true, :port => 4321 }
-set :keep_releases, 5
-default_run_options[:pty] = true
-server "isfadmin.com", :app, :web, :db, :primary => true
+require "bundler/capistrano"
+require "rvm/capistrano"
 
- 
-# require 'bundler/capistrano'
-# require 'capistrano/ext/multistage'
-# require 'new_relic/recipes'
- 
-# set :stages,                     %w(staging production)
-# set :default_stage,              "staging"
- 
-# set :scm,                        :git
-# set :repository,                 "..."
-# set :deploy_via,                 :remote_cache
-# default_run_options[:pty]        = true
- 
-# set :application,                "app"
-# set :use_sudo,                   false
-# set :user,                       "app"
-# set :normalize_asset_timestamps, false
- 
- 
-# before "deploy",                 "deploy:delayed_job:stop"
-# before "deploy:migrations",      "deploy:delayed_job:stop"
- 
-# after  "deploy:update_code",     "deploy:symlink_shared"
-# before "deploy:migrate",         "deploy:web:disable", "deploy:db:backup"
- 
-# after  "deploy",                                      "newrelic:notice_deployment", "deploy:cleanup", "deploy:delayed_job:restart"
-# after  "deploy:migrations",      "deploy:web:enable", "newrelic:notice_deployment", "deploy:cleanup", "deploy:delayed_job:restart"
- 
- 
-# namespace :deploy do
- 
-#   %w[start stop].each do |command|
-#     desc "#{command} unicorn server"
-#     task command, :roles => :app, :except => { :no_release => true } do
-#       run "#{current_path}/config/server/#{rails_env}/unicorn_init.sh #{command}"
-#     end
-#   end
- 
-#   desc "restart unicorn server"
-#   task :restart, :roles => :app, :except => { :no_release => true } do
-#     run "#{current_path}/config/server/#{rails_env}/unicorn_init.sh upgrade"
-#   end
- 
- 
-#   desc "Link in the production database.yml and assets"
-#   task :symlink_shared do
-#     run "ln -nfs #{deploy_to}/shared/config/database.yml #{release_path}/config/database.yml"
-#   end
- 
-#   namespace :delayed_job do 
-#     desc "Restart the delayed_job process"
-#     task :restart, :roles => :app, :except => { :no_release => true } do
-#       run "cd #{current_path}; RAILS_ENV=#{rails_env} bundle exec script/delayed_job restart" rescue nil
-#     end
-#     desc "Stop the delayed_job process"
-#     task :stop, :roles => :app, :except => { :no_release => true } do
-#       run "cd #{current_path}; RAILS_ENV=#{rails_env} bundle exec script/delayed_job stop" rescue nil
-#     end
-#   end
- 
- 
-#   namespace :db do
-#     desc "backup of database before migrations are invoked"
-#     task :backup, :roles => :db, :only => { :primary => true } do
-#       filename = "#{deploy_to}/shared/db_backup/#{stage}_db.#{Time.now.utc.strftime("%Y-%m-%d_%I:%M")}_before_deploy.gz"
-#       text = capture "cat #{deploy_to}/current/config/database.yml"
-#       yaml = YAML::load(text)["#{stage}"]
-    
-#       on_rollback { run "rm #{filename}" }
-#       run "mysqldump --single-transaction --quick -u#{yaml['username']} -h#{yaml['host']} -p#{yaml['password']} #{yaml['database']} | gzip -c > #{filename}"
-#     end
-#   end
- 
- 
-#   namespace :web do
-#     desc "Maintenance start"
-#     task :disable, :roles => :web do
-#       on_rollback { run "rm #{shared_path}/system/maintenance.html" }
-#       page = File.read("public/503.html")
-#       put page, "#{shared_path}/system/maintenance.html", :mode => 0644
-#     end
-    
-#     desc "Maintenance stop"
-#     task :enable, :roles => :web do
-#       run "rm #{shared_path}/system/maintenance.html"
-#     end
-#   end
- 
-# end
- 
- 
-# namespace :log do
-#   desc "A pinch of tail"
-#   task :tailf, :roles => :app do
-#     run "tail -n 10000 -f #{shared_path}/log/#{rails_env}.log" do |channel, stream, data|
-#       puts "#{data}"
-#       break if stream == :err
-#     end
-#   end
-# end
+server "123.123.123.123", :web, :app, :db, primary: true
+
+set :application, "ice"
+set :user, "zack"
+set :port, 22
+set :deploy_to, "/home/#{user}/apps/#{application}"
+set :deploy_via, :remote_cache
+set :use_sudo, false
+
+set :scm, "git"
+set :repository, "git@github.com:zacatac/#{application}.git"
+set :branch, "master"
+
+
+default_run_options[:pty] = true
+ssh_options[:forward_agent] = true
+
+after "deploy", "deploy:cleanup" # keep only the last 5 releases
+
+namespace :deploy do
+  %w[start stop restart].each do |command|
+    desc "#{command} unicorn server"
+    task command, roles: :app, except: {no_release: true} do
+      run "/etc/init.d/unicorn_#{application} #{command}"
+    end
+  end
+
+  task :setup_config, roles: :app do
+    sudo "ln -nfs #{current_path}/config/nginx.conf /etc/nginx/sites-enabled/#{application}"
+    sudo "ln -nfs #{current_path}/config/unicorn_init.sh /etc/init.d/unicorn_#{application}"
+    run "mkdir -p #{shared_path}/config"
+    put File.read("config/database.example.yml"), "#{shared_path}/config/database.yml"
+    puts "Now edit the config files in #{shared_path}."
+  end
+  after "deploy:setup", "deploy:setup_config"
+
+  task :symlink_config, roles: :app do
+    run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+  end
+  after "deploy:finalize_update", "deploy:symlink_config"
+
+  desc "Make sure local git is in sync with remote."
+  task :check_revision, roles: :web do
+    unless `git rev-parse HEAD` == `git rev-parse origin/master`
+      puts "WARNING: HEAD is not the same as origin/master"
+      puts "Run `git push` to sync changes."
+      exit
+    end
+  end
+  before "deploy", "deploy:check_revision"
+end
