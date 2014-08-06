@@ -13,6 +13,9 @@ set :repo_url, 'git@github.com:zacatac/ice.git'
 set :deploy_to, '/home/zack/apps/ice'
 set :deploy_user, 'zack'
 
+set :default_environment, {
+  'PATH' => "/opt/ruby-enterprise/bin/:$PATH"
+}
 # Set RVM. Defaults shoudl work
 
 # Default value for :scm is :git
