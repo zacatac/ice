@@ -39,8 +39,12 @@ group :development do
   unless ENV["CI"]
     gem 'thin'
     gem 'quiet_assets'
-    gem 'capistrano', '~> 2'
-    gem 'capistrano_colors'
+    gem 'capistrano', '~> 3.1.0'	
+    gem 'capistrano-rails', '~> 1.1.1'
+    gem 'capistrano-bundler', '~> 1.1.1'
+    gem 'capistrano-rvm'
+    #gem 'capistrano', '~> 2'
+    #gem 'capistrano_colors'
     gem 'guard'
     gem 'guard-rspec'
     gem 'guard-rails'
@@ -81,7 +85,7 @@ group :assets do
   gem 'uglifier',     '>= 1.0.3'
   gem 'execjs'
   gem 'therubyracer', :platform => :ruby unless ENV["CI"]
-  gem 'rvm-capistrano'
+  #gem 'rvm-capistrano'
 end
 
 gem 'turbo-sprockets-rails3'
