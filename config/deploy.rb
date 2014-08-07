@@ -2,6 +2,7 @@
 lock '3.1.0'
 
 require 'capistrano/rvm'
+require 'bundler/capistrano'
 
 set :application, 'fat_free_crm'
 set :repo_url, 'git@github.com:zacatac/ice.git'

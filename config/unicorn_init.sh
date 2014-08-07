@@ -14,7 +14,6 @@ set -e
 TIMEOUT=${TIMEOUT-60}
 APP_ROOT=/home/zack/apps/ice/current
 PID=$APP_ROOT/tmp/pids/unicorn.pid
-export 
 CMD="cd $APP_ROOT; bundle exec gem install unicorn; bundle exec unicorn -D -c $APP_ROOT/config/unicorn.rb -E production"
 AS_USER="zack"
 set -u
