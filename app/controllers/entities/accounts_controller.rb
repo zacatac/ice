@@ -45,7 +45,6 @@ class AccountsController < EntitiesController
     if params[:previous].to_s =~ /(\d+)\z/
       @previous = Account.my.find_by_id($1) || $1.to_i
     end
-
     respond_with(@account)
   end
 
@@ -99,7 +98,9 @@ class AccountsController < EntitiesController
         data[:codename] = "#{row[6].strip.upcase}"
         data[:birth]= "#{row[3].strip}"
         next if /[Tt]est/.match(data[:name])
-        @account = Account.new()
+        next if /[Tt]est/.match(data[:codename])
+        
+        @account = Account.new()        
         @account.assign_attributes(data)
         if @account.save
           saved += 1
