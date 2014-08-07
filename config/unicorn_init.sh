@@ -14,7 +14,7 @@ set -e
 TIMEOUT=${TIMEOUT-60}
 APP_ROOT=/home/zack/apps/ice/current
 PID=$APP_ROOT/tmp/pids/unicorn.pid
-CMD="cd $APP_ROOT; sudo chmod a+x /etc/init.d/unicorn_fat_free_crm.sh; bundle exec unicorn -D -c $APP_ROOT/config/unicorn.rb -E production"
+CMD="cd $APP_ROOT; bundle exec unicorn -D -c $APP_ROOT/config/unicorn.rb -E production"
 AS_USER="zack"
 set -u
 
