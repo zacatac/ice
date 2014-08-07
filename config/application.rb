@@ -82,7 +82,7 @@ module FatFreeCRM
     config.assets.initialize_on_precompile = false
 
     # Which extra assets to precompile
-    config.assets.precompile += %w(print.css)
+    config.assets.precompile += %w(print.css kiosk.css kiosk.js)
     
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
