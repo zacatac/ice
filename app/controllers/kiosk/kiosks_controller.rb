@@ -7,16 +7,6 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
   password = "MioEnergyBlackCherry"
   @@client.set_auth(@@domain, user, password)
   
-  @@headers = {
-    'Accept' => '*/*',
-    'Origin' => 'http => //kiosk.centermanagerpro.com',
-    'X-Requested-With' => 'XMLHttpRequest',
-    'Content-Type' => 'application/x-www-form-urlencoded; charset=UTF-8',
-    'Referer' => 'http => //kiosk.centermanagerpro.com/230/',
-    'Accept-Encoding' => 'gzip,deflate,sdch',
-    'Accept-Language' => 'en-US,en;q=0.8',
-    'Connection' => 'Keep-Alive'
-  }
   
   def reset
     reset_session
