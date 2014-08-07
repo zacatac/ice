@@ -92,10 +92,9 @@ class AccountsController < EntitiesController
     CSV.parse(file_contents) do |row|
       puts row.inspect
       if head
-        headers = row.split(',')[0].map{ |x| x.downcase }
+        headers = row.map{ |x| x.downcase }
         head = false
       else
-        row = row.split(',')[0]
         data[:name] = "#{row[0].strip.capitalize} #{row[1].strip.capitalize}"
         data[:email] = "#{row[4].strip.downcase}"  
         data[:codename] = "#{row[6].strip.upcase}"
