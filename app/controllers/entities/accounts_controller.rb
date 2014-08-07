@@ -90,7 +90,7 @@ class AccountsController < EntitiesController
     head = true
     saved = 0
     CSV.parse(file_contents) do |row|
-      puts row
+      puts row.inspect
       if head
         headers = row.split(',')[0].map{ |x| x.downcase }
         head = false
@@ -103,9 +103,11 @@ class AccountsController < EntitiesController
         next if /[Tt]est/.match(data[:name])
         @account = Account.new()
         @account.assign_attributes(data)
+        puts account.inspect
         if @account.save
           saved += 1
         end
+        puts "arrival"
       end
     end    
     flash.notice = "#{saved} accounts uploaded!"
