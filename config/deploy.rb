@@ -64,9 +64,9 @@ namespace :deploy do
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
       # Here we can do anything such as:
-      within release_path do
-        execute "cd /home/zack/apps/ice/current; RAILS_ENV=producion bundle exec rake ffcrm:setup"
-      end
+      # within release_path do
+      #   execute "cd /home/zack/apps/ice/current; RAILS_ENV=producion bundle exec rake ffcrm:setup"
+      # end
     end
   end
 
