@@ -14,7 +14,8 @@ set -e
 TIMEOUT=${TIMEOUT-60}
 APP_ROOT=/home/zack/apps/ice/current
 PID=$APP_ROOT/tmp/pids/unicorn.pid
-CMD="cd $APP_ROOT; ~/.rvm/gems/ruby-2.0.0-p481/bin/bundle exec unicorn -D -c $APP_ROOT/config/unicorn.rb -E production"
+#CMD="cd $APP_ROOT; bundle exec unicorn -D -c $APP_ROOT/config/unicorn.rb -E production"
+CMD="cd $APP_ROOT; /etc/init.d/unicorn_fat_free_crm restart"
 AS_USER="zack"
 set -u
 
