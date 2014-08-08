@@ -73,14 +73,22 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
       :phone => '',
       :phone2 => '',
       :areacode => '813',
-      :Sex => 'F',
-      :CodeName => @account.codename,
+      :Sex => params['sex'],
+      :CodeName => params['codename'],
       :GroupType => '', 
-      :email => @account.email,
+      :email => params['email'],
       :dob_y => dob_y,
       :dob_m => dob_m,
       :dob_d => dob_d
     }
+    domain = "#{@@domain}/ajax/savedata.php"
+    save_data = @@client.post domain, customer_data
+    puts save_data.status
+    response = JSON.parse save_data.content
+    puts response
+    if response[:success]
+      session[:waiver], session[:swipe] = false, true
+    end
     redirect_to :action => :index
   end
 
