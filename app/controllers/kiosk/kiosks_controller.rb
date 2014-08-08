@@ -64,6 +64,23 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
   def register
     puts "REGISTER"    
     puts params.inspect
+    fname, lname = params['first_name'].strip!.capitalize!, params['last_name'].strip!.capitalize!    
+    dob_m, dob_d, dob_y = params['birth'].split('/')
+    customer_data = {
+      :cardid => session[:cardid],
+      :FirstName => fname,
+      :LastName => lname,
+      :phone => '',
+      :phone2 => '',
+      :areacode => '813',
+      :Sex => 'F',
+      :CodeName => @account.codename,
+      :GroupType => '', 
+      :email => @account.email,
+      :dob_y => dob_y,
+      :dob_m => dob_m,
+      :dob_d => dob_d
+    }
     redirect_to :action => :index
   end
 
