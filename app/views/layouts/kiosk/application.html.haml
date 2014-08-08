@@ -15,12 +15,15 @@
     = render "layouts/kiosk/header"
     - if @swipe
       .row
-        .col-md-6.col-centered
+        .col-md-7.col-centered.text-centered
           %h1
             %a#kiosk-login-button{:href => "javascript:void(0);"} Sign in
             OR
             %a#kiosk-register-button{:href => "javascript:void(0);"} Register
+      .row
+        .col-md-5.col-centered
           #kiosk-login
+            %h1 Sign in
             = form_tag({controller: :kiosks, action: :signin}, method: :post) do
               %form#signin-form.form
                 .form-group
@@ -28,8 +31,7 @@
                   %input#email.form-control{:name => "email", :tabindex => "110", :type => "text", :value => ""}
                 %a#kiosk-no-email-button{:href => "javascript:void(0);"} Never entered your email?
                 %input#signin-button.btn.btn-block.btn-lg.btn-primary{:tabindex => "280", :type => "submit", :value => "Sign in"}
-      .row
-        .col-md-5.col-centered
+
           #kiosk-register
             %h1 Register
             = form_tag({controller: :kiosks, action: :register}, method: :post) do
@@ -67,7 +69,7 @@
     - elsif @waiver
       .row
         .col-md-12
-          %h3.waiver-heading ICE SPORTS FORUM ACKNOWLEDGEMENT AND RELEASE
+          %h3.waiver-heading ICE SPORTS FORUM <br> ACKNOWLEDGEMENT AND RELEASE
           .waiver-text
             %p
               For and in consideration of the admission price and the permission to use the ICE SPORTS FORUM Facilities (including but not

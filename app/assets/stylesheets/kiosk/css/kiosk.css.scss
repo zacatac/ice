@@ -12,6 +12,9 @@ body {
     margin: 0 auto;
 }
 
+.text-centered{
+    text-align: center;
+}
 #video, #canvas{
     border: 30px solid black;
     border-radius: 15px 15px 15px 15px;
@@ -67,7 +70,7 @@ body {
 /* } */
 .waiver-text{
     color: #ffffff;
-    margin: 0px -200px 0px -200px;
+    margin: 0px 0px 0px 0px;
 }
 
 .input-group-addon{
@@ -76,6 +79,7 @@ body {
 
 .waiver-heading{
     margin-top: -15px;
+    text-align: center;
 }
 
 .waiver-question{
