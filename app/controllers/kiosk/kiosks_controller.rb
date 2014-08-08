@@ -7,7 +7,6 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
   password = "MioEnergyBlackCherry"
   @@client.set_auth(@@domain, user, password)
   
-  
   def reset
     reset_session
     redirect_to :action => :index
@@ -25,7 +24,6 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
     puts "SIGNIN"    
     @account = Account.find_by_email(params[:email])
     puts @account.inspect
-    session[:waiver], session[:swipe] = true, false
     flash.notice = "Signing in"
     if @account.nil?
       flash.alert = "Email not found"
@@ -49,21 +47,24 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
         :dob_m => dob_m,
         :dob_d => dob_d
       }
+
       domain = "#{@@domain}/ajax/savedata.php"
       save_data = @@client.post domain, customer_data
-      puts save_data.status
       response = JSON.parse save_data.content
       puts response
-      if response[:success]
-        session[:waiver], session[:swipe] = false, true
+      if response["success"]  
+        flash.notice = "Signed in as #{@account.codename}"      
+        session[:waiver], session[:swipe] = true, false
+      else 
+        flash.notice = "An error occured: #{response}"
       end
+
     end
     redirect_to :action => :index
   end
 
   def register
     puts "REGISTER"    
-    puts params.inspect
     fname, lname = params['first_name'].strip.capitalize, params['last_name'].strip.capitalize
     dob_m, dob_d, dob_y = params['birth'].split('/')
     customer_data = {
@@ -74,20 +75,22 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
       :phone2 => '',
       :areacode => '813',
       :Sex => params['sex'],
-      :CodeName => params['codename'],
+      :CodeName => params['codename'].upcase,
       :GroupType => '', 
       :email => params['email'],
       :dob_y => dob_y,
       :dob_m => dob_m,
       :dob_d => dob_d
     }
+    puts customer_data
     domain = "#{@@domain}/ajax/savedata.php"
     save_data = @@client.post domain, customer_data
-    puts save_data.status
     response = JSON.parse save_data.content
-    puts response
-    if response[:success]
-      session[:waiver], session[:swipe] = false, true
+    if response["success"]
+      flash.notice = "Registered as #{customer_data[:CodeName]}"
+      session[:waiver], session[:swipe] = true, false
+    else 
+      flash.notice = "An error occured: #{response}"      
     end
     redirect_to :action => :index
   end

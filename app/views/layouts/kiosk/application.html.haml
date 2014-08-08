@@ -11,11 +11,6 @@
   /[if lt IE 9]
 
 %body
-  %h1
-    = "swipe #{@swipe}"
-    = "waiver #{@waiver}"
-    = "pic #{@pic}"
-    = "cardid #{@cardid}"
   %div.container.kiosk-container
     = render "layouts/kiosk/header"
     - if @swipe
