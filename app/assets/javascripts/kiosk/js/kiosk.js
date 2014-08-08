@@ -1,5 +1,5 @@
 $(document).ready(function () {
-
+    $("#kiosk-login").hide();
      $('#dp5').datetimepicker({
 	 viewMode: "years",
          pickTime: false
@@ -9,7 +9,7 @@ $(document).ready(function () {
      $('#calendar-click').click();
      $('#birth-text').val("");
      $("select[name='sex']").selectpicker({style: 'btn-primary', menuStyle: 'dropdown-inverse'});     
-     $("select[name='waiver']").selectpicker({style: 'btn-primary', menuStyle: 'dropdown-inverse'});     
+     $("select[name='waiver']").selectpicker({style: 'btn-primary', menuStyle: 'dropdown-inverse', size: 2});     
      $(".dropdown-menu li a").click(function(){
 	 
 	 $(".btn:first-child").text($(this).text());
@@ -22,7 +22,6 @@ $(document).ready(function () {
      $("#waiver").change(handleWaiverSelect);
      $("#file-button").hide();
      $("#file").hide();
-     $("#kiosk-login").hide();
      $("#canvas").hide();
      $('#retake-photo').hide();
      $('#save-photo').hide();
