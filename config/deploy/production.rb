@@ -17,11 +17,10 @@
 set :stage, :production
 set :rails_env, :production 
 
-server '104.131.201.14', user: 'zack', port: 1077,roles: %w{web app db}, primary: :true, ssh_options: {
-  keys: %w(Users/zrfield/.ssh/dropletisf),
+server 'isfadmin.com', user: 'zack', port: 1077, roles: %w{web app db}, primary: :true, ssh_options: {
+  keys: %w(~/.ssh/dropletisf),
   forward_agent: false,
-  auth_methods: %w(publickey, password)
-  #auth_methods: %w(password),
+  auth_methods: %w(publickey),
  }
 # you can set custom ssh options
 # it's possible to pass any option but you need to keep in mind that net/ssh understand limited list of options

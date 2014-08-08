@@ -93,8 +93,7 @@ class AccountsController < EntitiesController
         headers = row.map{ |x| x.downcase }
         head = false
       else
-        puts row.inspect
-        next if row[0].nil? 
+        next if row[0].nil? or row[1].nil? or row[5].nil? or row[3].nil?
         data[:name] = "#{row[0].strip.capitalize} #{row[1].strip.capitalize}"
         data[:email] = "#{row[4].strip.downcase}"  
         @comment_body = "Visited: #{row[5].strip}"
@@ -116,13 +115,8 @@ class AccountsController < EntitiesController
             puts "Why was this not uploaded?"
           else
             @comments = Comment.find_all_by_commentable_id(@account.id)
-            puts "BEGIN"
-            puts @comments.inspect
-            puts @comment_body
             similar = false
             @comments.each  do |comment| 
-              puts comment[:comment]
-              puts comment[:comment] == @comment_body
               if comment[:comment] == @comment_body
                 similar = true
               end
