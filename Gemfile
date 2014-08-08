@@ -9,6 +9,7 @@ gem 'pg'
 gem 'httpclient'
 gem 'net-ssh', '~> 2.7.0'
 gem 'unicorn', :platform => :ruby
+
 # Removes a gem dependency
 def remove(name)
   @dependencies.reject! {|d| d.name == name }

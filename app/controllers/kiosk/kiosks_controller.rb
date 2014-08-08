@@ -63,7 +63,7 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
 
   def register
     puts "REGISTER"    
-    puts params.register
+    puts params.inspect
     redirect_to :action => :index
   end
 

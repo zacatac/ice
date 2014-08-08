@@ -82,8 +82,8 @@ module FatFreeCRM
     config.assets.initialize_on_precompile = false
     
     #Adding font assets to path
-    puts "#{Rails.root}/app/assets/fonts"
-    config.assets.paths << "#{Rails.root}/app/assets/fonts"
+    puts Rails.root.join("fonts")
+    config.assets.paths << Rails.root.join("fonts")
 
     # Which extra assets to precompile
     config.assets.precompile += %w(print.css kiosk.css kiosk.js)
