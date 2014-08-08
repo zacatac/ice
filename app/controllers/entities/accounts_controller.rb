@@ -93,7 +93,8 @@ class AccountsController < EntitiesController
         headers = row.map{ |x| x.downcase }
         head = false
       else
-        next if row[0].nil?
+        puts row.inspect
+        next if row[0].nil? 
         data[:name] = "#{row[0].strip.capitalize} #{row[1].strip.capitalize}"
         data[:email] = "#{row[4].strip.downcase}"  
         @comment_body = "Visited: #{row[5].strip}"
