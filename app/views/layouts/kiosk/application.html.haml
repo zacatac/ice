@@ -18,7 +18,8 @@
     = "cardid #{@cardid}"
   %div.container.kiosk-container
     = render "layouts/kiosk/header"
-    - if @swipe
+    -# - if @swipe
+    - if true      
       .row
         .col-md-6.col-centered
           %h1
@@ -37,36 +38,37 @@
         .col-md-5.col-centered
           #kiosk-register
             %h1 Register
-            %form#register-form.form{:action => "kiosk/kiosks#register", :formnovalidate => "", :method => "POST", :novalidate => "", :role => "form"}
-              .form-group
-                %label.control-label{:for => "first_name"} First Name
-                %input#first_name.form-control{:name => "first_name", :tabindex => "210", :type => "text", :value => ""}
-              .form-group
-                %label.control-label{:for => "last_name"} Last Name
-                %input#last_name.form-control{:name => "last_name", :tabindex => "210", :type => "text", :value => ""}
-              .form-group
-                %label.control-label{:for => "codename"} Codename
-                %input#codename.form-control{:name => "codename", :tabindex => "210", :type => "text", :value => ""}
-              .form-group
-                %label.control-label{:for => "birth"} Birthdate
-                .row
-                  .col-md-4.birth-select
-                    #dp5.input-group.date{"data-date-format" => "MM/DD/YYYY"}
-                      %input#birth-text.form-control{:name => "birth", :type => "text"}/
-                      %span#calendar-click.input-group-addon
-                        %span.glyphicon.glyphicon-calendar
-              .form-group
-                %label.control-label{:for => "sex"} Gender
-                .row
-                  .col-xs-3
-                    %select.select-block{:name => "sex", :style => "display: none;", :value => ""}
-                      %option{:value => "M"} Male
-                      %option{:value => "F"} Female
-                      %option{:value => ""} Other
-              .form-group
-                %label.control-label{:for => "email"} Email
-                %input#email.form-control{:name => "email", :tabindex => "220", :type => "text", :value => ""}
-              %input#register-button.btn.btn-block.btn-lg.btn-primary{:tabindex => "280", :type => "submit", :value => "Register"}
+            = form_tag({controller: :kiosks, action: :register}, method: :post) do
+              %form#register-form.form
+                .form-group
+                  %label.control-label{:for => "first_name"} First Name
+                  %input#first_name.form-control{:name => "first_name", :tabindex => "210", :type => "text", :value => ""}
+                .form-group
+                  %label.control-label{:for => "last_name"} Last Name
+                  %input#last_name.form-control{:name => "last_name", :tabindex => "210", :type => "text", :value => ""}
+                .form-group
+                  %label.control-label{:for => "codename"} Codename
+                  %input#codename.form-control{:name => "codename", :tabindex => "210", :type => "text", :value => ""}
+                .form-group
+                  %label.control-label{:for => "birth"} Birthdate
+                  .row
+                    .col-md-4.birth-select
+                      #dp5.input-group.date{"data-date-format" => "MM/DD/YYYY"}
+                        %input#birth-text.form-control{:name => "birth", :type => "text"}/
+                        %span#calendar-click.input-group-addon
+                          %span.glyphicon.glyphicon-calendar
+                .form-group
+                  %label.control-label{:for => "sex"} Gender
+                  .row
+                    .col-xs-3
+                      %select.select-block{:name => "sex", :style => "display: none;", :value => ""}
+                        %option{:value => "M"} Male
+                        %option{:value => "F"} Female
+                        %option{:value => ""} Other
+                .form-group
+                  %label.control-label{:for => "email"} Email
+                  %input#email.form-control{:name => "email", :tabindex => "220", :type => "text", :value => ""}
+                %input#register-button.btn.btn-block.btn-lg.btn-primary{:tabindex => "280", :type => "submit", :value => "Register"}
 
     - elsif @waiver
       .row

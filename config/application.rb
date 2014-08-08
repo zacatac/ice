@@ -80,9 +80,14 @@ module FatFreeCRM
 
     # Don't initialize Rails environment
     config.assets.initialize_on_precompile = false
+    
+    #Adding font assets to path
+    puts "#{Rails.root}/app/assets/fonts"
+    config.assets.paths << "#{Rails.root}/app/assets/fonts"
 
     # Which extra assets to precompile
     config.assets.precompile += %w(print.css kiosk.css kiosk.js)
+    config.assets.precompile += %w( .svg .eot .woff .ttf)
     
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'

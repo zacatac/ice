@@ -63,6 +63,8 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
 
   def register
     puts "REGISTER"    
+    puts params.register
+    redirect_to :action => :index
   end
 
   def waiver
