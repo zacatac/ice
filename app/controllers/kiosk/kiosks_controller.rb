@@ -24,12 +24,10 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
     puts "SIGNIN"    
     @account = Account.find_by_email(params[:email])
     puts @account.inspect
-    flash.notice = "Signing in"
     if @account.nil?
-      flash.alert = "Email not found"
+      flash.notice = "Email not found"
       session[:waiver], session[:swipe] = false, true
     else 
-      flash.notice = "Signed in as #{@account.codename}"
       fname, lname = @account.name.split(' ')
       dob_m, dob_d, dob_y = @account.birth.mon, @account.birth.mday, @account.birth.year 
       customer_data = {
@@ -107,7 +105,7 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
     if save_waiver.status == 200
       session[:swipe], session[:waiver], session[:pic] = false, false, true
     else
-      flash.alert = "Error uploading waiver"
+      flash.notice = "Error uploading waiver"
       redirect_to :action => :reset
     end
     redirect_to :action => :index
@@ -127,7 +125,7 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
       flash.notice = "Signed in successfully"
       redirect_to :action => :reset
     else
-      flash.alert = "Upload error. Please try again"
+      flash.notice = "Upload error. Please try again (RESPONSE: #{save_photo.repsonse})"
       redirect_to :action => :index
     end
   end
@@ -141,7 +139,7 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
     puts response
     swipe = true
     if not response["reg"]
-      flash.alert = "Card not registered"      
+      flash.notice = "Card not registered"      
       swipe = false
     end    
     session[:swipe] = swipe
