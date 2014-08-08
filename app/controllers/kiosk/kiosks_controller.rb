@@ -13,7 +13,10 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
   end
 
   def index
-    puts "CALLING INDEX"
+    puts "CALLING INDEX"    
+    if not flash.notice.nil? and flash.notice == "Signed in successfully"
+      reset_session
+    end
     @swipe = session[:swipe]
     @waiver = session[:waiver]
     @pic = session[:pic]
@@ -24,9 +27,8 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
     puts "SIGNIN"    
     @account = Account.find_by_email(params[:email])
     puts @account.inspect
-    flash.notice = "Signing in"
     if @account.nil?
-      flash.alert = "Email not found"
+      flash.notice = "Email not found"
       session[:waiver], session[:swipe] = false, true
     else 
       flash.notice = "Signed in as #{@account.codename}"
@@ -46,8 +48,7 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
         :dob_y => dob_y,
         :dob_m => dob_m,
         :dob_d => dob_d
-      }
-
+      }      
       domain = "#{@@domain}/ajax/savedata.php"
       save_data = @@client.post domain, customer_data
       response = JSON.parse save_data.content
@@ -58,7 +59,6 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
       else 
         flash.notice = "An error occured: #{response}"
       end
-
     end
     redirect_to :action => :index
   end
@@ -125,7 +125,7 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
     puts save_photo.content
     if save_photo.status == 200
       flash.notice = "Signed in successfully"
-      redirect_to :action => :reset
+      redirect_to :action => :index
     else
       flash.alert = "Upload error. Please try again"
       redirect_to :action => :index
