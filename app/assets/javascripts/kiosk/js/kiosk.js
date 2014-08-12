@@ -10,15 +10,22 @@ $(document).ready(function () {
      $('#birth-text').val("");
      $("select[name='sex']").selectpicker({style: 'btn-primary', menuStyle: 'dropdown-inverse'});     
      $("select[name='waiver']").selectpicker({style: 'btn-primary', menuStyle: 'dropdown-inverse', size: 2});     
-     $(".dropdown-menu li a").click(function(){
-	 
-	 $(".btn:first-child").text($(this).text());
-	 $(".btn:first-child").val($(this).text());
-	 
+     $(".dropdown-menu li a").click(function(button){	 
+	 $(this).closest(".btn-group").find(".btn").text($(this).text());
+	 $(this).closest(".btn-group").find(".btn").val($(this).text());	 
      });
-     
+    var optionsBootstrap = {
+        classNamePrefix: 'bvalidator_bootstraprc_',
+        position: {x:'right', y:'center'},
+        offset:     {x:15, y:0},
+        template: '<div class="{errMsgClass}"><div class="bvalidator_bootstraprc_arrow"></div><div class="bvalidator_bootstraprc_cont1">{message}</div></div>',    
+        templateCloseIcon: '<div style="display:table"><div style="display:table-cell">{message}</div><div style="display:table-cell"><div class="{closeIconClass}">&#215;</div></div></div>'
+    };
+
+    $("#signin-form").bValidator(optionsBootstrap);
+    $("#register-form").bValidator(optionsBootstrap);
     $("#swipe").focus();
-     $("#waiver-button").hide();
+    $("#waiver-button").hide();
      $("#waiver").change(handleWaiverSelect);
      $("#file-button").hide();
      $("#file").hide();
@@ -51,37 +58,30 @@ $(document).ready(function () {
 	//ALDSKFJASLKDJALSKDJ
 	return false;
     });    
-
-    $('#signin-form').submit(function () {
+    
+    function addCardidField(jform) {
 	var cardidField = $("<input>")
 	    .attr("type","hidden")
 	    .attr("name", "cardid").val(window.cardid);
-	$('#signin-form').append($(cardidField));
+	jform.append($(cardidField));	
+    }
+    $('#signin-form').submit(function () {
+	addCardidField($('#signin-form'))
 	return true;
     });
 
     $('#register-form').submit(function () {
- 	var cardidField = $("<input>")
-	    .attr("type","hidden")
-	    .attr("name", "cardid").val(window.cardid);
-	console.log(window.cardid);
-	$('#register-form').append($(cardidField));
+	addCardidField($('#register-form'))
 	return true;
     });
  
     $('#waiver-form').submit(function () {
- 	var cardidField = $("<input>")
-	    .attr("type","hidden")
-	    .attr("name", "cardid").val(window.cardid);
-	$('#waiver-form').append($(cardidField));
+	addCardidField($('#waiver-form'))
 	return true;
     });
 
     $('#photo-form').submit(function () {
- 	var cardidField = $("<input>")
-	    .attr("type","hidden")
-	    .attr("name", "cardid").val(window.cardid);
-	$('#photo-form').append($(cardidField));
+	addCardidField($('#photo-form'))
 	return true;
     });
      
@@ -146,7 +146,6 @@ $(document).ready(function () {
  });
 
 function handleWaiverSelect(){
-    console.log($("#waiver").find(":selected").text());
     if ($("#waiver").find(":selected").text() === "Yes"){		
 	$("#waiver-button").show();
     } else {

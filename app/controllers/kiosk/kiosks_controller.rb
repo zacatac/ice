@@ -8,7 +8,11 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
   @@client.set_auth(@@domain, user, password)
   
   def reset
+    signedin = session[:signedin]
     reset_session
+    if signedin
+      flash.notice = "Signed in successfully"
+    end
     redirect_to :action => :index
   end
 
@@ -118,6 +122,7 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
     puts save_photo.content
     if save_photo.status == 200
       flash.notice = "Signed in successfully"
+      session[:signedin] = true
       redirect_to :action => :reset
     else
       flash.notice = "Upload error. Please try again (RESPONSE: #{save_photo.repsonse})"

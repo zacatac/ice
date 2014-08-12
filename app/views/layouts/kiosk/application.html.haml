@@ -24,33 +24,33 @@
         .col-md-5.col-centered
           #kiosk-login
             %h1 Sign in
-            = form_tag({controller: :kiosks, action: :signin}, method: :post) do
+            = form_tag({controller: :kiosks, action: :signin}, method: :post, id: :'signin-form') do
               %form#signin-form.form
                 .form-group
                   %label.control-label{:for => "email"} Email
-                  %input#email.form-control{:name => "email", :tabindex => "110", :type => "text", :value => ""}
+                  %input#email.form-control{:name => "email", :tabindex => "110", :type => "text", :value => "",  :'data-bvalidator' => "required,email"}
                 %a#kiosk-no-email-button{:href => "javascript:void(0);"} Never entered your email?
                 %input#signin-button.btn.btn-block.btn-lg.btn-primary{:tabindex => "280", :type => "submit", :value => "Sign in"}
 
           #kiosk-register
             %h1 Register
-            = form_tag({controller: :kiosks, action: :register}, method: :post) do
+            = form_tag({controller: :kiosks, action: :register}, method: :post, id: :'register-form') do
               %form#register-form.form
                 .form-group
                   %label.control-label{:for => "first_name"} First Name
-                  %input#first_name.form-control{:name => "first_name", :tabindex => "210", :type => "text", :value => ""}
+                  %input#first_name.form-control{:name => "first_name", :tabindex => "210", :type => "text", :value => "", :'data-bvalidator' => "required,maxlength[35]"}
                 .form-group
                   %label.control-label{:for => "last_name"} Last Name
-                  %input#last_name.form-control{:name => "last_name", :tabindex => "210", :type => "text", :value => ""}
+                  %input#last_name.form-control{:name => "last_name", :tabindex => "210", :type => "text", :value => "", :'data-bvalidator' => "required,maxlength[35]"}
                 .form-group
                   %label.control-label{:for => "codename"} Codename
-                  %input#codename.form-control{:name => "codename", :tabindex => "210", :type => "text", :value => ""}
+                  %input#codename.form-control{:name => "codename", :tabindex => "210", :type => "text", :value => "", :'data-bvalidator' => "required,maxlength[13]"}
                 .form-group
                   %label.control-label{:for => "birth"} Birthdate
                   .row
                     .col-md-4.birth-select
                       #dp5.input-group.date{"data-date-format" => "MM/DD/YYYY"}
-                        %input#birth-text.form-control{:name => "birth", :type => "text"}/
+                        %input#birth-text.form-control{:name => "birth", :type => "text", :'data-bvalidator' => "required,date[dd/mm/yyyy]"}/
                         %span#calendar-click.input-group-addon
                           %span.glyphicon.glyphicon-calendar
                 .form-group
@@ -63,7 +63,7 @@
                         %option{:value => ""} Other
                 .form-group
                   %label.control-label{:for => "email"} Email
-                  %input#email.form-control{:name => "email", :tabindex => "220", :type => "text", :value => ""}
+                  %input#email.form-control{:name => "email", :tabindex => "220", :type => "text", :value => "",  :'data-bvalidator' => "email"}
                 %input#register-button.btn.btn-block.btn-lg.btn-primary{:tabindex => "280", :type => "submit", :value => "Register"}
 
     - elsif @waiver
@@ -155,7 +155,7 @@
               %br
               your
               %br card
-            = form_tag({controller: :kiosks, action: :swipe}, method: :post) do
+            = form_tag({controller: :kiosks, action: :swipe}, method: :post, id: :'swipe-form') do
               %form#swipe-form.form
                 .form-group
                   %label.control-label{:for => "swipe", :style => "display:none;"} Swipe
