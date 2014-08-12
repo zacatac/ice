@@ -1,10 +1,12 @@
 $(document).ready(function () {
     $("#kiosk-login").hide();
+    
      $('#dp5').datetimepicker({
 	 viewMode: "years",
-         pickTime: false
+         pickTime: false,
+	 useCurrent: false,
+	 defaultDate: new Date(1990,1,1)
      });    
-     
      $('#calendar-click').click();
      $('#calendar-click').click();
      $('#birth-text').val("");
