@@ -11,7 +11,7 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
     signedin = session[:signedin]
     reset_session
     if signedin
-      flash.notice = "Signed in successfully"
+      flash.notice = "Signed in successfully! You are ready to play!"
     end
     redirect_to :action => :index
   end
