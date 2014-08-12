@@ -13,7 +13,6 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
   end
 
   def index
-    puts "CALLING INDEX"
     @swipe = session[:swipe]
     @waiver = session[:waiver]
     @pic = session[:pic]
@@ -21,7 +20,6 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
   end
 
   def signin
-    puts "SIGNIN"    
     @account = Account.find_by_email(params[:email])
     puts @account.inspect
     if @account.nil?
@@ -62,7 +60,6 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
   end
 
   def register
-    puts "REGISTER"    
     fname, lname = params['first_name'].strip.capitalize, params['last_name'].strip.capitalize
     dob_m, dob_d, dob_y = params['birth'].split('/')
     customer_data = {
@@ -94,7 +91,6 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
   end
 
   def waiver
-    puts "WAIVER"   
     waiver_data = {
       :cardid => session[:cardid],
       :custid => session[:cardid]      
@@ -106,13 +102,12 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
       session[:swipe], session[:waiver], session[:pic] = false, false, true
     else
       flash.notice = "Error uploading waiver"
-      redirect_to :action => :reset
+      redirect_to :action => :index
     end
     redirect_to :action => :index
   end
 
   def pic
-    puts "PIC" 
     photo_data = {
       :cardid => session[:cardid],
       :custid => session[:cardid],
@@ -138,11 +133,14 @@ class Kiosk::KiosksController < Kiosk::ApplicationController
     response = JSON.parse validate_swipe.content
     puts response
     swipe = true
-    if not response["reg"]
+    if not response["valid"]
+      flash.notice = "Card Read Error"
+      swipe = false
+    elsif not response["reg"]
       flash.notice = "Card not registered"      
       swipe = false
     end    
-    session[:swipe] = swipe
+    session[:swipe] = swipe    
     session[:cardid] = response["cardid"]
     redirect_to :action => :index
   end
