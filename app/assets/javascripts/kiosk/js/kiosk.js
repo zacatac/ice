@@ -26,8 +26,8 @@ $(document).ready(function () {
     $("#register-form").bValidator(optionsBootstrap);
     $("#swipe").focus();
     $("#waiver-button").hide();
-     $("#waiver").change(handleWaiverSelect);
-     $("#file-button").hide();
+    $("#waiver").change(handleWaiverSelect);
+    $("#file-button").hide();
      $("#file").hide();
      $("#canvas").hide();
      $('#retake-photo').hide();
@@ -46,18 +46,18 @@ $(document).ready(function () {
      $("#kiosk-register-button").click(focusRegisterForm);
      $("#kiosk-no-email-button").click(focusRegisterForm);
     
-    $('#swipe-form').submit(function () {
-	console.log($('#swipe').val().slice(0,5));
-	if ($('#swipe').val().slice(0,5) !== '%LTCC'){
-	    alertify.error("Card Read Error. Please swipe again.");
-	    return false;
-	}
-	window.swipe = $('#swipe').val();
-	window.cardid = $('#swipe').val().split("?")[0].slice(5);
-	$('#swipe-form').ajaxSubmit({url: "{{ url_for('kiosk.main') }}", type: 'post'})
-	//ALDSKFJASLKDJALSKDJ
-	return false;
-    });    
+    // $('#swipe-form').submit(function () {
+    // 	console.log($('#swipe').val().slice(0,5));
+    // 	if ($('#swipe').val().slice(0,5) !== '%LTCC'){
+    // 	    alertify.error("Card Read Error. Please swipe again.");
+    // 	    return false;
+    // 	}
+    // 	window.swipe = $('#swipe').val();
+    // 	window.cardid = $('#swipe').val().split("?")[0].slice(5);
+    // 	$('#swipe-form').ajaxSubmit({url: "{{ url_for('kiosk.main') }}", type: 'post'})
+    // 	//ALDSKFJASLKDJALSKDJ
+    // 	return false;
+    // });    
     
     function addCardidField(jform) {
 	var cardidField = $("<input>")
