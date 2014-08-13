@@ -9,10 +9,11 @@ namespace :setup do
   end
 
   desc "Upload nginx files."
-  task :upload_yml do
+  task :upload_nginx do
     on roles(:app) do
       execute "mkdir -p #{shared_path}/config"
       upload! StringIO.new(File.read("config/nginx.conf")), "#{shared_path}/config/nginx.conf"      
+      execute "mkdir -p #{shared_path}/config/server/production"
       upload! StringIO.new(File.read("config/server/production/nginx.conf")), "#{shared_path}/config/server/production/nginx.conf"      
     end
   end
