@@ -1,5 +1,5 @@
 config/*.yml	
-!config/deploy.rb
+config/deploy.rb
 !config/settings.yml
 nginx.conf
 .rspec
