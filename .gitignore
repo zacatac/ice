@@ -1,4 +1,4 @@
-config/*
+config/*.yml
 
 .rspec
 spec/reports
