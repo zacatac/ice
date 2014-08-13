@@ -18,6 +18,14 @@ namespace :setup do
     end
   end
 
+  desc "Upload settings files."
+  task :upload_settings do
+    on roles(:app) do
+      execute "mkdir -p #{shared_path}/config"
+      upload! StringIO.new(File.read("config/settings.yml")), "#{shared_path}/config/settings.yml"      
+    end
+  end
+
   desc "Seed the database."
   task :seed_db do
     on roles(:app) do
@@ -38,5 +46,7 @@ namespace :setup do
       execute "ln -nfs #{current_path}/config/unicorn_init.sh /etc/init.d/unicorn_#{fetch(:application)}"
    end
   end
+  
+
 
 end

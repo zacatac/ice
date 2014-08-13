@@ -17,4 +17,18 @@ namespace :deploy do
       end
     end
   end
+
+  desc "Symlink database config file."
+  task :symlink_db do
+    on roles(:app) do
+      execute "ln -s #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+    end
+  end
+  
+  desc "Symlink nginx config file."
+  task :symlink_nginx do
+    on roles(:app) do
+      execute "ln -s #{shared_path}/config/nginx.conf #{release_path}/config/nginx.conf"
+    end
+  end
 end
