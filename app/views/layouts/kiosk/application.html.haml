@@ -1,0 +1,172 @@
+!!!5
+%head
+  %meta{charset: "utf-8"}/
+  %meta{name: "viewport", content: "width=1000, initial-scale=1.0, maximum-scale=1.0"}
+
+  %title Laserstrike
+  = stylesheet_link_tag "kiosk"
+  
+  / HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries
+  / WARNING: Respond.js doesn't work if you view the page via file://
+  /[if lt IE 9]
+
+%body
+  %div.container.kiosk-container
+    = render "layouts/kiosk/header"
+    - if @swipe
+      .row
+        .col-md-7.col-centered.text-centered
+          %h1
+            %a#kiosk-login-button{:href => "javascript:void(0);"} Sign in
+            OR
+            %a#kiosk-register-button{:href => "javascript:void(0);"} Register
+      .row
+        .col-md-5.col-centered
+          #kiosk-login
+            %h1 Sign in
+            = form_tag({controller: :kiosks, action: :signin}, method: :post, id: :'signin-form') do
+              %form#signin-form.form
+                .form-group
+                  %label.control-label{:for => "email"} Email
+                  %input#email.form-control{:name => "email", :tabindex => "110", :type => "text", :value => "",  :'data-bvalidator' => "required,email"}
+                %a#kiosk-no-email-button{:href => "javascript:void(0);"} Never entered your email?
+                %input#signin-button.btn.btn-block.btn-lg.btn-primary{:tabindex => "280", :type => "submit", :value => "Sign in"}
+
+          #kiosk-register
+            %h1 Register
+            = form_tag({controller: :kiosks, action: :register}, method: :post, id: :'register-form') do
+              %form#register-form.form
+                .form-group
+                  %label.control-label{:for => "first_name"} First Name
+                  %input#first_name.form-control{:name => "first_name", :tabindex => "210", :type => "text", :value => "", :'data-bvalidator' => "required,maxlength[35]"}
+                .form-group
+                  %label.control-label{:for => "last_name"} Last Name
+                  %input#last_name.form-control{:name => "last_name", :tabindex => "210", :type => "text", :value => "", :'data-bvalidator' => "required,maxlength[35]"}
+                .form-group
+                  %label.control-label{:for => "codename"} Codename
+                  %input#codename.form-control{:name => "codename", :tabindex => "210", :type => "text", :value => "", :'data-bvalidator' => "required,maxlength[13]"}
+                .form-group
+                  %label.control-label{:for => "birth"} Birthdate
+                  .row
+                    .col-md-4.birth-select
+                      #dp5.input-group.date{"data-date-format" => "MM/DD/YYYY"}
+                        %input#birth-text.form-control{:name => "birth", :type => "text", :'data-bvalidator' => "required,date[mm/dd/yyyy]"}/
+                        %span#calendar-click.input-group-addon
+                          %span.glyphicon.glyphicon-calendar
+                .form-group
+                  %label.control-label{:for => "sex"} Gender
+                  .row
+                    .col-xs-3
+                      %select.select-block{:name => "sex", :style => "display: none;", :value => ""}
+                        %option{:value => "M"} Male
+                        %option{:value => "F"} Female
+                        %option{:value => ""} Other
+                .form-group
+                  %label.control-label{:for => "email"} Email
+                  %input#email.form-control{:name => "email", :tabindex => "220", :type => "text", :value => "",  :'data-bvalidator' => "email"}
+                %input#register-button.btn.btn-block.btn-lg.btn-primary{:tabindex => "280", :type => "submit", :value => "Register"}
+
+    - elsif @waiver
+      .row
+        .col-md-12
+          %h3.waiver-heading ICE SPORTS FORUM <br> ACKNOWLEDGEMENT AND RELEASE
+          .waiver-text
+            %p
+              For and in consideration of the admission price and the permission to use the ICE SPORTS FORUM Facilities (including but not
+              limited to all property, amusements, attractions, and improvements in and around the premises commonly known as 10222
+              Elizabeth Pl, Tampa, FL) you hereby agree to and acknowledge the following:
+            %ol
+              %li That you are only authorized to use the ICE SPORTS FORUM premises and facilities upon the proper execution of this document.
+              %li
+                That this document is a material part of the consideration and agreement between you and ICE SPORTS FORUM for the
+                admission to and use of its premises and facilities.
+              %li
+                That you have read this entire document and completely understand its contents.  You also acknowledge that any
+                questions about the content of this document or use of the premises and facilities have been answered by a
+                representative of ICE SPORTS FORUM.
+              %li
+                That you accept all responsibility for property damage to ICE SPORTS FORUM's premises and facilities caused by your
+                actions.  You also understand that the term "ICE SPORTS FORUM's premises and facilities" includes the building, all fixtures
+                in and around it, the surrounding parking area and the equipment associated with it.
+              %li
+                That you acknowledge that the owners and operators of ICE SPORTS FORUM have employed diligent efforts and care in making
+                the facilities and premises as safe as possible; and that despite the foregoing efforts, you understand that there are,
+                nevertheless, certain inherent risks in using the facilities and premises.  Among these risks are possible trips,
+                falls, collisions with other people or objects, etc.  You specifically acknowledge the existence of these risks and
+                agree to the use of the premises and facilities with the full understanding of the same.
+              %li
+                That if you or your property are injured while using the premises and facilities as a result of the inherent risks
+                and dangers mentioned above, you agree to RELEASE, INDEMNIFY AND HOLD LASERTRON, INC (AND IT'S AFFILIATES LT JOINT
+                VENTURES, INC, LASERTRON, INC, AND LT EQUIPMENT, INC). HARMLESS FROM SAID INJURIES OR ANY COSTS OR EXPENSES ASSOCIATED THEREWITH EVEN IF
+                THEY WERE CAUSED BY THE AFFIRMATIVE NEGLIGENCE OF ICE SPORTS FORUM, INC (AND IT'S AFFILIATES LT JOINT VENTURES, INC,
+                LASERTRON, INC, AND LT EQUIPMENT, INC) or any of its employees, agents, or representatives.
+              %li
+                That you agree to obey all rules and regulations for the use of these facilities and premises, which are posted
+                throughout the premises, and the directions, if any, given by ICE SPORTS FORUM's representatives either before, during or
+                after use of the same.
+              %li
+                That you specifically agree to allow ICE SPORTS FORUM to employ any photographs or video taken of you while on the
+                premises for publicity purposes.
+              %li
+                That you acknowledge if you are under the age of (18) years, that you have discussed the terms and conditions of
+                this document with your parents, and that your parents, after reading this document, consent to you signing the same
+                and, further, that you have been authorized by your parents to agree to the specific terms and conditions contained
+                herein.
+            %p
+              DO AGREE TO THIS ACKNOWLEDGEMENT AND RELEASE UNLESS YOU HAVE READ IT AND UNDERSTAND IT.  IF YOU DON'T UNDERSTAND IT,
+              ASK AN ICE SPORTS FORUM REPRESENTATIVE FOR ASSISTANCE.
+          .row
+            = form_tag({controller: :kiosks, action: :waiver}, method: :post) do
+              %form#waiver-form.form
+                .col-md-12.col-centered
+                  .form-group
+                    .row
+                      .col-md-8.col-centered
+                        .col-md-6
+                          %label.control-label{:for => "waiver"}
+                            %h6.waiver-question Do you agree to the waiver?
+                        .col-md-2
+                          %select#waiver.select-block{:name => "waiver", :style => "display: none;", :value => ""}
+                            %option{:value => "N"} No
+                            %option{:value => "Y"} Yes
+                        %br
+                        %input#waiver-button.btn.btn-block.btn-lg.btn-info{:style => "display:none;", :tabindex => "280", :type => "submit", :value => "Continue"}
+
+    - elsif @pic
+      .row
+        .col-md-7.col-centered
+          %video#video.video{:autoplay => "", :width => "640"}
+          %canvas#canvas{:height => "435", :width => "580"}
+          %button#snap.btn.btn-block.btn-lg.btn-primary Snap Photo
+          %button#retake-photo.btn.btn-block.btn-lg.btn-primary Retake Photo
+          %button#save-photo.btn.btn-block.btn-lg.btn-primary Save Photo
+          = form_tag({controller: :kiosks, action: :pic}, method: :post) do
+            %form#photo-form
+              %input#file{:name => "file", :type => "text"}
+                %br/
+                %br/
+              %input#file-button{:type => "submit", :value => "submit"}
+    - else 
+      .row
+        .col-md-12
+          .col-md-6.col-centered
+            %h1.kiosk-logo.col-centered.kiosk-swipe
+              Swipe
+              %br
+              your
+              %br card
+            = form_tag({controller: :kiosks, action: :swipe}, method: :post, id: :'swipe-form') do
+              %form#swipe-form.form
+                .form-group
+                  %label.control-label{:for => "swipe", :style => "display:none;"} Swipe
+                  %input#swipe.form-control{:name => "swipe", :style => "opacity:1;", :tabindex => "110", :type => "text", :value => ""}
+                %input#swipe-button{:style => "display:none;", :tabindex => "180", :type => "submit", :value => "Enter Swipe"}
+    %br
+    %br
+    = form_tag({controller: :kiosks, action: :reset}, method: :get) do
+      .form-group 
+        .row
+          .col-lg-4.col-centered
+            %input#reset-button.btn.btn-block.btn-lg.btn-danger{:tabindex => "280", :type => "submit", :value => "Restart"}
+
+  = javascript_include_tag "kiosk"
