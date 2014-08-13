@@ -1,4 +1,5 @@
 config/*.yml
+nginx.conf
 
 .rspec
 spec/reports
