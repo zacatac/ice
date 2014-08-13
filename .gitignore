@@ -1,4 +1,5 @@
 config/*.yml	
+config/database.yml	
 config/deploy.rb
 !config/settings.yml
 nginx.conf
