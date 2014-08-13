@@ -7,6 +7,13 @@ $(document).ready(function () {
 	 useCurrent: false,
 	 defaultDate: new Date(1990,1,1)
      });    
+    
+    
+    window.setTimeout(function() { 
+	$(".flash").animo({animation: 'fadeOutRight', duration: 0.5, keep: true}, function() {
+	    $(".animated").hide('slow', function() { $('.animated').remove()});
+	});
+    },5000);
      $('#calendar-click').click();
      $('#calendar-click').click();
      $('#birth-text').val("");
