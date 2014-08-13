@@ -1,5 +1,4 @@
 config/*.yml	
-!config/settings.yml
 
 .rspec
 spec/reports
