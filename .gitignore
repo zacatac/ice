@@ -1,4 +1,4 @@
-config/database.yml	
+config/*
 
 .rspec
 spec/reports
