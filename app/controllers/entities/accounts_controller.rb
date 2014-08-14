@@ -67,17 +67,7 @@ class AccountsController < EntitiesController
   # POST /accounts (many)
   #----------------------------------------------------------------------------
   def create_many
-    data = {      
-      :user_id => current_user.id,
-      :assigned_to => current_user.id,
-      :category => params[:account][:category],
-      :subscribed_users => nil,
-      :name => nil,
-      :email => nil,
-      :codename => nil,
-      :birth => nil
-    }
-
+    
     file_data = params[:account][:customers]
     if file_data.respond_to?(:read)
       file_contents = file_data.read
@@ -86,50 +76,51 @@ class AccountsController < EntitiesController
     else
       logger.error "Bad file_data: #{file_data.class.name}: #{file_data.inspect}"
     end
-    head = true
-    saved = 0
-    CSV.parse(file_contents) do |row|
-      if head
-        headers = row.map{ |x| x.downcase }
-        head = false
-      else
-        next if row[0].nil? or row[1].nil? or row[5].nil? or row[3].nil?
-        data[:name] = "#{row[0].strip.capitalize} #{row[1].strip.capitalize}"
-        data[:email] = "#{row[4].strip.downcase}"  
-        @comment_body = "Visited: #{row[5].strip}"
-        data[:codename] = "#{row[6].strip.upcase}"
-        data[:birth]= "#{row[3].strip}"
-        data.delete_if { |k,v| k==:birth and v[0]=="0" }
-        next if /[Tt]est/.match(data[:name])
-        next if /[Tt]est/.match(data[:codename])
-        next if data[:name].length > 63
-
-        @account = Account.new()        
-        @account.assign_attributes(data)
-        if @account.save
-          @account.add_comment_by_user(@comment_body, current_user)
-          saved += 1          
-        else 
-          @account = Account.where(name: data[:name]).first
-          if @account.nil?
-            puts "Why was this not uploaded?"
-          else
-            @comments = Comment.find_all_by_commentable_id(@account.id)
-            similar = false
-            @comments.each  do |comment| 
-              if comment[:comment] == @comment_body
-                similar = true
-              end
-            end 
-            puts "END"
-            unless similar               
-              @account.add_comment_by_user(@comment_body, current_user)
-            end
-          end
-        end
-      end
-    end        
-    flash.notice = "#{saved} accounts uploaded!"
+    UploadJob.new.async.perform(file_contents, params[:account][:category], current_user)
+    # head = true
+    # saved = 0
+    # CSV.parse(file_contents) do |row|
+    #   if head
+    #     headers = row.map{ |x| x.downcase }
+    #     head = false
+    #   else
+    #     next if row[0].nil? or row[1].nil? or row[5].nil? or row[3].nil?
+    #     data[:name] = "#{row[0].strip.capitalize} #{row[1].strip.capitalize}"
+    #     data[:email] = "#{row[4].strip.downcase}"  
+    #     @comment_body = "Visited: #{row[5].strip}"
+    #     data[:codename] = "#{row[6].strip.upcase}"
+    #     data[:birth]= "#{row[3].strip}"
+    #     data.delete_if { |k,v| k==:birth and v[0]=="0" }
+    #     next if /[Tt]est/.match(data[:name])
+    #     next if /[Tt]est/.match(data[:codename])
+    #     next if data[:name].length > 63
+        
+    #     @account = Account.new()        
+    #     @account.assign_attributes(data)
+    #     if @account.save
+    #       @account.add_comment_by_user(@comment_body, current_user)
+    #       saved += 1          
+    #     else 
+    #       @account = Account.where(name: data[:name]).first
+    #       if @account.nil?
+    #         puts "Why was this not uploaded?"
+    #       else
+    #         @comments = Comment.find_all_by_commentable_id(@account.id)
+    #         similar = false
+    #         @comments.each  do |comment| 
+    #           if comment[:comment] == @comment_body
+    #             similar = true
+    #           end
+    #         end 
+    #         puts "END"
+    #         unless similar               
+    #           @account.add_comment_by_user(@comment_body, current_user)
+    #         end
+    #       end
+    #     end
+    #   end
+    # end        
+    # flash.notice = "#{saved} accounts uploaded!"
     redirect_to action: 'index'
   end
   

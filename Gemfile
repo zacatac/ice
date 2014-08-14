@@ -9,6 +9,7 @@ gem 'pg'
 gem 'httpclient'
 gem 'net-ssh', '~> 2.7.0'
 gem 'unicorn', :platform => :ruby
+gem 'sucker_punch', '~> 1.0'
 
 # Removes a gem dependency
 def remove(name)
