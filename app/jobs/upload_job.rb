@@ -44,11 +44,16 @@ class UploadJob
           if @account.save
             @account.add_comment_by_user(@comment_body, current_user)
             saved += 1          
-          else 
-            @account = Account.where(name: data[:name]).first
-            if @account.nil?
-              puts "Why was this not uploaded?"
+          else             
+            if :email.nil?              
+              @account = Account.where(name: data[:name]).first
             else
+              @account = Account.where(email: data[:email]).first
+              unless @account.nil?
+                Account.update(@account.id,data)
+              end
+            end
+            unless @account.nil?
               @comments = Comment.find_all_by_commentable_id(@account.id)
               similar = false
               @comments.each  do |comment| 

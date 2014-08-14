@@ -71,7 +71,7 @@ class Account < ActiveRecord::Base
   ransack_can_autocomplete
 
   validates_presence_of :name, :message => :missing_account_name
-  validates_uniqueness_of :name, :scope => :deleted_at, :if => -> { Setting.require_unique_account_names }
+  validates_uniqueness_of :name, :scope => :deleted_at, :if => :email_not_present_and_config?
   validates_uniqueness_of :email, :scope => :deleted_at, :allow_blank => true, :allow_nil => true, :if => -> { Setting.require_unique_emails }
   validates :rating, :inclusion => { in: 0..5 }, allow_blank: true
   validates :category, :inclusion => { in: Proc.new{ Setting.unroll(:account_category).map{|s| s.last.to_s} } }, allow_blank: true
@@ -136,5 +136,9 @@ class Account < ActiveRecord::Base
     self.category = nil if self.category.blank?
   end
 
+  def email_not_present_and_config?
+    !:email.nil? and Setting.require_unique_account_names
+  end
+    
   ActiveSupport.run_load_hooks(:fat_free_crm_account, self)
 end
