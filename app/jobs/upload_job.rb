@@ -6,7 +6,7 @@
 
 class UploadJob
   include SuckerPunch::Job
-  workers 2
+  workers 1
 
   def perform(file_contents, category, current_user)
     ActiveRecord::Base.connection_pool.with_connection do    
